@@ -5,9 +5,9 @@ import android.os.Handler;
 
 public class UpdateRunnable implements Runnable {
 
-    private long mTimeInterval;
-    private TimedTextView mTimedTextView;
-    private TextFormatter mFormatter;
+    private final long mTimeInterval;
+    private final TimedTextView mTimedTextView;
+    private final TextFormatter mFormatter;
     private Handler mHandler;
 
     public UpdateRunnable(long timeInterval, TimedTextView textView, TextFormatter formatter) {

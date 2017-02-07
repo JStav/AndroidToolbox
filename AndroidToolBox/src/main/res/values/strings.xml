@@ -1,6 +1,2 @@
 <resources>
-    <string name="app_name">TimedTextView</string>
-    <string name="reset_time">Reset Time</string>
-    <string name="start_updates">Start</string>
-    <string name="stop_updates">Stop</string>
 </resources>

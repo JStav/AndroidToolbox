@@ -1,4 +1,4 @@
-package com.stav.toolbox.example.test;
+package com.stav.toolbox.example;
 
 import org.junit.Test;
 

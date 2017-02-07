@@ -13,7 +13,7 @@ import com.stav.toolbox.base.TimedTextView;
  */
 public class TimeAgoTextView extends TimedTextView{
 
-    private TimeAgoFormatter mTimeAgoFormatter;
+    private final TimeAgoFormatter mTimeAgoFormatter;
 
     public TimeAgoTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

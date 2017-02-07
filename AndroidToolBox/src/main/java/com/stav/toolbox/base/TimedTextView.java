@@ -46,12 +46,16 @@ public class TimedTextView extends TextView {
      */
     public void startUpdates() {
         if(mTimeInterval != 0 && mFormatter != null) {
-            mHandler = new Handler();
 
-            mUpdateRunnable = new UpdateRunnable(mTimeInterval, this, mFormatter);
-            mUpdateRunnable.setHandler(mHandler);
+            if(mHandler == null) {
+                mHandler = new Handler();
+            }
 
-            mHandler.postDelayed(mUpdateRunnable, mTimeInterval);
+            if(mUpdateRunnable == null) {
+                mUpdateRunnable = new UpdateRunnable(mTimeInterval, this, mFormatter);
+                mUpdateRunnable.setHandler(mHandler);
+                mHandler.postDelayed(mUpdateRunnable, mTimeInterval);
+            }
         }
     }
 
@@ -61,6 +65,8 @@ public class TimedTextView extends TextView {
     public void stopUpdates() {
         if(mHandler != null && mUpdateRunnable != null) {
             mHandler.removeCallbacks(mUpdateRunnable);
+            mHandler = null;
+            mUpdateRunnable = null;
         }
     }
 }

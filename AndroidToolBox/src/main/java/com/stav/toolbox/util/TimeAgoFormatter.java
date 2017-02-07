@@ -10,7 +10,7 @@ import com.stav.toolbox.base.TextFormatter;
  */
 public class TimeAgoFormatter implements TextFormatter {
 
-    long mTimestamp;
+    private long mTimestamp;
 
     /**
      * @param mTimestamp Initial timestamp to compare "now" time to
@@ -34,7 +34,12 @@ public class TimeAgoFormatter implements TextFormatter {
     @Override
     public String format() {
         if(mTimestamp != 0) {
-            return DateUtils.getRelativeTimeSpanString(mTimestamp, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+            return DateUtils
+                    .getRelativeTimeSpanString(
+                            mTimestamp,
+                            System.currentTimeMillis(),
+                            DateUtils.SECOND_IN_MILLIS)
+                    .toString();
         } else {
             return null;
         }
