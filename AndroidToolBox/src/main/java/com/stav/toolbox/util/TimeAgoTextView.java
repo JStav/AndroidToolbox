@@ -31,11 +31,4 @@ public class TimeAgoTextView extends TimedTextView{
     public void setTimestamp(long timestamp) {
         mTimeAgoFormatter.setTimestamp(timestamp);
     }
-
-  /**
-   * @return Currently held timestamp
-   */
-  public long getTimestamp() {
-        return mTimeAgoFormatter.getTimestamp();
-    }
 }
