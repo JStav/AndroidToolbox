@@ -38,11 +38,13 @@ public class UpdateRunnable implements Runnable {
 
         if(mFormatter != null) {
             mTimedTextView.setText(mFormatter.format());
+
+            if(mOnTickCallback != null) {
+                mOnTickCallback.onTick(mFormatter.getTimestamp());
+            }
+
         }
 
-        if(mOnTickCallback != null) {
-            mOnTickCallback.onTick();
-        }
 
         if(mHandler != null) {
             mHandler.postDelayed(this, mTimeInterval);

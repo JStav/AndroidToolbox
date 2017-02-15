@@ -6,4 +6,5 @@ package com.stav.toolbox.base;
  */
 public interface TextFormatter {
     String format();
+    long getTimestamp();
 }

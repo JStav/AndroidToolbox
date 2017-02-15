@@ -1,5 +1,5 @@
 package com.stav.toolbox.base;
 
 public interface OnTickCallback {
-  void onTick();
+  void onTick(long comparedTimestamp);
 }
