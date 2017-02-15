@@ -16,6 +16,7 @@ public class TimedTextView extends TextView {
     private Handler mHandler;
     private UpdateRunnable mUpdateRunnable;
     private TextFormatter mFormatter;
+    private OnTickCallback mOnTickCallback;
     private long mTimeInterval;
 
     /**
@@ -41,6 +42,14 @@ public class TimedTextView extends TextView {
         mFormatter = formatter;
     }
 
+  /**
+   * Sets a callback for every tick of the timed TextView
+   * @param onTickCallback {@link OnTickCallback}
+   */
+  public void setOnTickCallback(OnTickCallback onTickCallback) {
+        mOnTickCallback = onTickCallback;
+    }
+
     /**
      * Start the timed updates. Will not start unless both the time interval and the formatter are set.
      */
@@ -52,9 +61,11 @@ public class TimedTextView extends TextView {
             }
 
             if(mUpdateRunnable == null) {
-                mUpdateRunnable = new UpdateRunnable(mTimeInterval, this, mFormatter);
+                mUpdateRunnable = new UpdateRunnable(mTimeInterval, this);
                 mUpdateRunnable.setHandler(mHandler);
-                mHandler.postDelayed(mUpdateRunnable, mTimeInterval);
+                mUpdateRunnable.setOnTickCallback(mOnTickCallback);
+                mUpdateRunnable.setFormatter(mFormatter);
+                mHandler.post(mUpdateRunnable);
             }
         }
     }

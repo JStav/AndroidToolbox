@@ -7,13 +7,22 @@ public class UpdateRunnable implements Runnable {
 
     private final long mTimeInterval;
     private final TimedTextView mTimedTextView;
-    private final TextFormatter mFormatter;
+
+    private TextFormatter mFormatter;
+    private OnTickCallback mOnTickCallback;
     private Handler mHandler;
 
-    public UpdateRunnable(long timeInterval, TimedTextView textView, TextFormatter formatter) {
+    public UpdateRunnable(long timeInterval, TimedTextView textView) {
         mTimedTextView = textView;
         mTimeInterval = timeInterval;
-        mFormatter = formatter;
+    }
+
+    public void setOnTickCallback(OnTickCallback onTickCallback) {
+        this.mOnTickCallback = onTickCallback;
+    }
+
+    public void setFormatter(TextFormatter formatter) {
+        this.mFormatter = formatter;
     }
 
     /**
@@ -27,7 +36,13 @@ public class UpdateRunnable implements Runnable {
     @Override
     public void run() {
 
-        mTimedTextView.setText(mFormatter.format());
+        if(mFormatter != null) {
+            mTimedTextView.setText(mFormatter.format());
+        }
+
+        if(mOnTickCallback != null) {
+            mOnTickCallback.onTick();
+        }
 
         if(mHandler != null) {
             mHandler.postDelayed(this, mTimeInterval);
