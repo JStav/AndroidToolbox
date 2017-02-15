@@ -27,6 +27,13 @@ public class TimeAgoFormatter implements TextFormatter {
         mTimestamp = timestamp;
     }
 
+  /**
+   * @return Current timestamp updates are compared to
+   */
+  public long getTimestamp() {
+        return mTimestamp;
+    }
+
     /**
      * Compare the set timestamp to "now" and format a "time ago" string using DateUtils.
      * @return  "time ago" string or null if the timestamp is not set or 0. (results in TextView being blank)
