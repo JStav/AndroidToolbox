@@ -18,76 +18,81 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimedTextView extends AppCompatTextView {
 
-    private TextFormatter mFormatter;
-    private OnTickCallback mOnTickCallback;
-    private long mTimeInterval;
+  private TextFormatter mFormatter;
+  private OnTickCallback mOnTickCallback;
+  private long mTimeInterval;
 
-    private Disposable looperDisposable;
+  private Disposable looperDisposable;
 
-    /**
-     * {@inheritDoc}
-     */
-    public TimedTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public TimedTextView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    /**
-     * Sets the update time for the TextView
-     * @param interval Time interval in milliseconds
-     */
-    public void setTimeInterval(long interval) {
-        mTimeInterval = interval;
-    }
+  /**
+   * Sets the update time for the TextView
+   *
+   * @param interval Time interval in milliseconds
+   */
+  public void setTimeInterval(long interval) {
+    mTimeInterval = interval;
+  }
 
-    /**
-     * Sets the text formatter for whenever this view updates
-     * @param formatter {@link TextFormatter} for this TextView
-     */
-    public void setFormatter(TextFormatter formatter) {
-        mFormatter = formatter;
-    }
+  /**
+   * Sets the text formatter for whenever this view updates
+   *
+   * @param formatter {@link TextFormatter} for this TextView
+   */
+  public void setFormatter(TextFormatter formatter) {
+    mFormatter = formatter;
+  }
 
   /**
    * Sets a callback for every tick of the timed TextView
+   *
    * @param onTickCallback {@link OnTickCallback}
    */
   public void setOnTickCallback(OnTickCallback onTickCallback) {
-        mOnTickCallback = onTickCallback;
+    mOnTickCallback = onTickCallback;
+  }
+
+  /**
+   * Start the timed updates. Will not start unless both the time interval and the formatter are
+   * set.
+   */
+  public void startUpdates() {
+
+    // Don't start multiple observables
+    if (looperDisposable != null) {
+      return;
     }
 
-    /**
-     * Start the timed updates. Will not start unless both the time interval and the formatter are set.
-     */
-    public void startUpdates() {
+    looperDisposable = Observable.interval(mTimeInterval, TimeUnit.MILLISECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Long>() {
+          @Override public void accept(Long aLong) throws Exception {
 
-      // Don't start multiple observables
-      if(looperDisposable != null) {
-        return;
-      }
+            System.out.println("Still running timer");
 
-      looperDisposable = Observable.interval(mTimeInterval, TimeUnit.MILLISECONDS)
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Consumer<Long>() {
-              @Override public void accept(Long aLong) throws Exception {
-
-                if(mFormatter != null) {
-                  setText(mFormatter.format());
-                  if(mOnTickCallback != null) {
-                    mOnTickCallback.onTick(mFormatter.getTimestamp());
-                  }
-                }
+            if (mFormatter != null) {
+              setText(mFormatter.format());
+              if (mOnTickCallback != null) {
+                mOnTickCallback.onTick(mFormatter.getTimestamp());
               }
-      });
+            }
+          }
+        });
+  }
 
+  /**
+   * Stops timed updates. Does nothing if {@link #startUpdates()} hasn't been called yet.
+   */
+  public void stopUpdates() {
+    if (looperDisposable != null) {
+      looperDisposable.dispose();
     }
-
-    /**
-     * Stops timed updates. Does nothing if {@link #startUpdates()} hasn't been called yet.
-     */
-    public void stopUpdates() {
-      if(looperDisposable != null) {
-        looperDisposable.dispose();
-      }
-    }
+  }
 }

@@ -11,24 +11,25 @@ import com.stav.toolbox.base.TimedTextView;
  *
  * Defaults timestamp to current time, and interval to 1 second.
  */
-public class TimeAgoTextView extends TimedTextView{
+public class TimeAgoTextView extends TimedTextView {
 
-    private final TimeAgoFormatter mTimeAgoFormatter;
+  private final TimeAgoFormatter mTimeAgoFormatter;
 
-    public TimeAgoTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+  public TimeAgoTextView(Context context, AttributeSet attrs) {
+    super(context, attrs);
 
-        // Set the formatter
-        mTimeAgoFormatter = new TimeAgoFormatter(System.currentTimeMillis());
-        setFormatter(mTimeAgoFormatter);
-        setTimeInterval(1000); // 1 second
-    }
+    // Set the formatter
+    mTimeAgoFormatter = new TimeAgoFormatter(System.currentTimeMillis());
+    setFormatter(mTimeAgoFormatter);
+    setTimeInterval(1000); // 1 second
+  }
 
-    /**
-     * Update timestamp to compare to
-     * @param timestamp New timestamp
-     */
-    public void setTimestamp(long timestamp) {
-        mTimeAgoFormatter.setTimestamp(timestamp);
-    }
+  /**
+   * Update timestamp to compare to
+   *
+   * @param timestamp New timestamp
+   */
+  public void setTimestamp(long timestamp) {
+    mTimeAgoFormatter.setTimestamp(timestamp);
+  }
 }

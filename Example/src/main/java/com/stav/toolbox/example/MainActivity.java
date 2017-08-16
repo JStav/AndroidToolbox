@@ -10,17 +10,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.btn_time_ago)
-    Button mBtnTimeAgoExample;
+  @BindView(R.id.btn_time_ago) Button mBtnTimeAgoExample;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-    }
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    ButterKnife.bind(this);
+  }
 
-    @OnClick(R.id.btn_time_ago) void startTimeAgoActivity() {
-        startActivity(new Intent(this, TimeAgoActivity.class));
-    }
+  @OnClick(R.id.btn_time_ago) void startTimeAgoActivity() {
+    startActivity(new Intent(this, TimeAgoActivity.class));
+  }
 }

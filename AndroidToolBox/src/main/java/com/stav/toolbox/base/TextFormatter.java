@@ -5,6 +5,7 @@ package com.stav.toolbox.base;
  * when it does update.
  */
 public interface TextFormatter {
-    String format();
-    long getTimestamp();
+  String format();
+
+  long getTimestamp();
 }
