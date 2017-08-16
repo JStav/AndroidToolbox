@@ -24,7 +24,7 @@ public class TimeAgoActivity extends AppCompatActivity {
 
         mTvTimeAgo.setTimeInterval(5000);
         mTvTimeAgo.setOnTickCallback(new OnTickCallback() {
-            @Override public void onTick() {
+            @Override public void onTick(long timestamp) {
                 String msg = "OnTick: " + System.currentTimeMillis();
                 mTvOnTick.setText(msg);
             }
