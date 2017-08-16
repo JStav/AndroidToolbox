@@ -74,9 +74,6 @@ public class TimedTextView extends AppCompatTextView {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Consumer<Long>() {
           @Override public void accept(Long aLong) throws Exception {
-
-            System.out.println("Still running timer");
-
             if (mFormatter != null) {
               setText(mFormatter.format());
               if (mOnTickCallback != null) {
@@ -93,6 +90,7 @@ public class TimedTextView extends AppCompatTextView {
   public void stopUpdates() {
     if (looperDisposable != null) {
       looperDisposable.dispose();
+      looperDisposable = null;
     }
   }
 }
