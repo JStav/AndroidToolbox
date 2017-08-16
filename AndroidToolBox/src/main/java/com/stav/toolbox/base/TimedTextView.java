@@ -1,9 +1,14 @@
 package com.stav.toolbox.base;
 
 import android.content.Context;
-import android.os.Handler;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import java.util.concurrent.TimeUnit;
 
 /**
  * TextView that updates on a specified time interval.
@@ -11,13 +16,13 @@ import android.widget.TextView;
  * By default this TextView will not update, and will only begin to update
  * when it is passed in its time interval and TextFormatter
  */
-public class TimedTextView extends TextView {
+public class TimedTextView extends AppCompatTextView {
 
-    private Handler mHandler;
-    private UpdateRunnable mUpdateRunnable;
     private TextFormatter mFormatter;
     private OnTickCallback mOnTickCallback;
     private long mTimeInterval;
+
+    private Disposable looperDisposable;
 
     /**
      * {@inheritDoc}
@@ -54,30 +59,35 @@ public class TimedTextView extends TextView {
      * Start the timed updates. Will not start unless both the time interval and the formatter are set.
      */
     public void startUpdates() {
-        if(mTimeInterval != 0 && mFormatter != null) {
 
-            if(mHandler == null) {
-                mHandler = new Handler();
-            }
+      // Don't start multiple observables
+      if(looperDisposable != null) {
+        return;
+      }
 
-            if(mUpdateRunnable == null) {
-                mUpdateRunnable = new UpdateRunnable(mTimeInterval, this);
-                mUpdateRunnable.setHandler(mHandler);
-                mUpdateRunnable.setOnTickCallback(mOnTickCallback);
-                mUpdateRunnable.setFormatter(mFormatter);
-                mHandler.post(mUpdateRunnable);
-            }
-        }
+      looperDisposable = Observable.interval(mTimeInterval, TimeUnit.MILLISECONDS)
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Consumer<Long>() {
+              @Override public void accept(Long aLong) throws Exception {
+
+                if(mFormatter != null) {
+                  setText(mFormatter.format());
+                  if(mOnTickCallback != null) {
+                    mOnTickCallback.onTick(mFormatter.getTimestamp());
+                  }
+                }
+              }
+      });
+
     }
 
     /**
      * Stops timed updates. Does nothing if {@link #startUpdates()} hasn't been called yet.
      */
     public void stopUpdates() {
-        if(mHandler != null && mUpdateRunnable != null) {
-            mHandler.removeCallbacks(mUpdateRunnable);
-            mHandler = null;
-            mUpdateRunnable = null;
-        }
+      if(looperDisposable != null) {
+        looperDisposable.dispose();
+      }
     }
 }

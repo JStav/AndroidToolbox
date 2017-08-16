@@ -22,7 +22,7 @@ public class TimeAgoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_time_ago);
         ButterKnife.bind(this);
 
-        mTvTimeAgo.setTimeInterval(5000);
+        mTvTimeAgo.setTimeInterval(1);
         mTvTimeAgo.setOnTickCallback(new OnTickCallback() {
             @Override public void onTick(long timestamp) {
                 String msg = "OnTick: " + System.currentTimeMillis();
