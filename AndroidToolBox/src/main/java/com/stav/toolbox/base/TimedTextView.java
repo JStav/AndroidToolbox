@@ -58,6 +58,15 @@ public class TimedTextView extends AppCompatTextView {
     mOnTickCallback = onTickCallback;
   }
 
+  private void doOnTick() {
+    if (mFormatter != null) {
+      setText(mFormatter.format());
+      if (mOnTickCallback != null) {
+        mOnTickCallback.onTick(mFormatter.getTimestamp());
+      }
+    }
+  }
+
   /**
    * Start the timed updates. Will not start unless both the time interval and the formatter are
    * set.
@@ -69,17 +78,12 @@ public class TimedTextView extends AppCompatTextView {
       return;
     }
 
-    looperDisposable = Observable.interval(mTimeInterval, TimeUnit.MILLISECONDS)
+    looperDisposable = Observable.interval(0, mTimeInterval, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Consumer<Long>() {
           @Override public void accept(Long aLong) throws Exception {
-            if (mFormatter != null) {
-              setText(mFormatter.format());
-              if (mOnTickCallback != null) {
-                mOnTickCallback.onTick(mFormatter.getTimestamp());
-              }
-            }
+            doOnTick();
           }
         });
   }
